@@ -17,17 +17,27 @@ async function readLines(filename, transform = null) {
     return lines.map((l, i) => transform(l, i));
 }
 
-async function writeCsv(collection, filename, { separator = ';', replacement = '_', skipFields = [], columns=false, capitalize = false, verbose = true } = {}) {
-    if ( !collection.length ) {
+async function writeCsv(collection, filename, {
+    separator = ';',
+    replacement = '_',
+    skipFields = [],
+    columns = false,
+    capitalize = false,
+    dateFormat = 'dateOnly',
+    verbose = true } = {}
+) {
+    if (!collection.length) {
         verbose && console.log(`Collection is empty. No file written`)
-        return {written: false};
+        return { written: false };
     }
     const fields = columns || Object.keys(collection[0]).filter(v => skipFields.indexOf(v) === -1);
     const lines = collection.map(member => {
-        return fields.reduce((acc, value) => {            
+        return fields.reduce((acc, value) => {
             let v = member[value];
-            if ( v && v.replace)
-                v = v.replace(separator,replacement)
+            if (dateFormat === 'dateOnly' && v && v.getFullYear)
+                v = v.toISOString().substr(0, 10);
+            if (v && v.replace)
+                v = v.replace(separator, replacement)
             acc.push(v);
             return acc;
         }, []).join(separator)
@@ -39,7 +49,15 @@ async function writeCsv(collection, filename, { separator = ';', replacement = '
     })
     await writeFile(filename, [fieldNames.join(separator), ...lines].join('\n'));
     verbose && console.log(`${collection.length} rows written to ${filename}`);
-    return {filename};
+    return { filename };
+}
+
+module.exports = {
+    resolve,
+    readFile,
+    writeFile,
+    readLines,
+    writeCsv
 }
 
 module.exports = {
