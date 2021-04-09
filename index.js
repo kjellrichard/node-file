@@ -1,7 +1,10 @@
 const fs = require('fs');
 const { promisify } = require('util');
 const { resolve } = require('path');
-const [readFile, writeFile, deleteFile] = [promisify(fs.readFile), promisify(fs.writeFile), promisify(fs.unlink)];
+const [readFile, writeFile, 
+    deleteFile, stat] = [
+    promisify(fs.readFile), promisify(fs.writeFile), 
+    promisify(fs.unlink), promisify(fs.stat)];
 
 
 async function readLines(filename, transform = null) {
@@ -59,5 +62,6 @@ module.exports = {
     writeFile,
     readLines,
     writeCsv,
-    deleteFile
+    deleteFile,
+    stat
 }
