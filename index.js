@@ -40,8 +40,10 @@ async function writeCsv(collection, filename, {
             let v = member[value];
             if (dateFormat === 'dateOnly' && v && v.getFullYear)
                 v = v.toISOString().substr(0, 10);
-            if (v && v.replace)
+            if (v && v.replace) {
                 v = v.replace(separator, replacement)
+                v = v.replace(/"/g, replacement)
+            }
             acc.push(v);
             return acc;
         }, []).join(separator)
