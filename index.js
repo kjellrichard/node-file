@@ -42,7 +42,7 @@ async function writeCsv(collection, filename, {
                 v = v.toISOString().substr(0, 10);
             if (v && v.replace) {
                 v = v.replace(separator, replacement)
-                v = v.replace(/"/g, replacement)
+                v = v.replace(/["\n\r\t]/g, ' ')
             }
             acc.push(v);
             return acc;

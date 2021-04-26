@@ -1,6 +1,6 @@
 {
   "name": "node-file",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "handy file utils",
   "main": "index.js",
   "scripts": {
