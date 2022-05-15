@@ -1,14 +1,14 @@
 const fs = require('fs');
 const { promisify } = require('util');
 const { resolve } = require('path');
-const [readFile, writeFile, 
+const [readFile, writeFile,
     deleteFile, stat,
     appendFile
 ] = [
-    promisify(fs.readFile), promisify(fs.writeFile), 
-    promisify(fs.unlink), promisify(fs.stat),
-    promisify(fs.appendFile)
-];
+        promisify(fs.readFile), promisify(fs.writeFile),
+        promisify(fs.unlink), promisify(fs.stat),
+        promisify(fs.appendFile)
+    ];
 
 
 async function readLines(filename, transform = null) {
@@ -44,6 +44,13 @@ async function writeCsv(collection, filename, {
             let v = member[value];
             if (dateFormat === 'dateOnly' && v && v.getFullYear)
                 v = v.toISOString().substr(0, 10);
+            if (v && v.constructor === Array) {
+                v = v.join(',')
+            }
+            if (v && v.replace) {
+                v = v.replace(new RegExp(separator, 'g'), replacement)
+                v = v.replace(/["\n\r\t]/g, ' ')
+            }
             if (v && v.replace) {
                 v = v.replace(separator, replacement)
                 v = v.replace(/["\n\r\t]/g, ' ')
