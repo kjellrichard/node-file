@@ -51,10 +51,7 @@ async function writeCsv(collection, filename, {
                 v = v.replace(new RegExp(separator, 'g'), replacement)
                 v = v.replace(/["\n\r\t]/g, ' ')
             }
-            if (v && v.replace) {
-                v = v.replace(separator, replacement)
-                v = v.replace(/["\n\r\t]/g, ' ')
-            }
+
             acc.push(v);
             return acc;
         }, []).join(separator)
